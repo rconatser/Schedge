@@ -1,0 +1,28 @@
+.App {
+  width: 100vw;
+  display:flex;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  height: 100vh;
+  background: #34608F;
+  color: white;
+}
+
+.logo {
+  margin-bottom: 40px;
+}
+
+.classroom {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+.teacher {
+  display: flex;
+  flex-direction: column;
+}

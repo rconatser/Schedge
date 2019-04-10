@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import BigCalendar from "react-big-calendar";
 import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+import events from './events';
 
 import "./App.css";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
@@ -12,83 +13,111 @@ const localizer = BigCalendar.momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(BigCalendar);
 
 class App extends Component {
-  state = {
-    events: [
-      {
-        start: new Date(),
-        end: new Date(moment().add(1, "days")),
-        title: "Some title"
-      }
-    ]
+    constructor(props){
+      super(props);
+      this.state = {
+        events: events
+    }
+    this.resizeEvent = this.resizeEvent.bind(this);
+    this.moveEvent = this.moveEvent.bind(this);
   };
 
-  onEventResize = (type, { event, start, end, allDay }) => {
-    this.setState(state => {
-      state.events[0].start = start;
-      state.events[0].end = end;
-      return { events: state.events };
+  moveEvent ({ event, start, end, allDay }){
+    const { events } = this.state;
+
+    const idx = events.indexOf(event);
+
+    const updatedEvent = { ...event, start, end, allDay };
+
+    const nextEvents = [ ...events ];
+    nextEvents.splice(idx, 1, updatedEvent);
+
+    this.setState({
+      events: nextEvents,
     });
   };
 
-  onEventDrop = ({ event, start, end, allDay }) => {
-    this.setState(state => {
-      state.events[0].start = start;
-      state.events[0].end = end;
-      return { events: state.events };
+  resizeEvent ({ event, start, end }){
+    const { events } = this.state;
+    const nextEvents = events.map(existingEvent => {
+      return existingEvent.id === event.id ? { ...existingEvent, start, end } : existingEvent;
     });
-    console.log(start);
+
+    this.setState({
+      events: nextEvents,
+    });
   };
+
+
+  handleSelect = ({ start, end }) => {
+    const title = window.prompt('New Event name')
+    if (title)
+      this.setState({
+        events: [
+          ...this.state.events,
+          {
+            start,
+            end,
+            title,
+          },
+        ],
+      })
+  }
 
   render() {
-    console.log(this.state.events[0]);
+    console.log(this.state.events);
     return (
       <div className="App">
-        <div class="sidebar">
-          <div class="logo">
-            <h2>Schedge&nbsp;<i class="far fa-calendar-alt"></i></h2>
+        <div className="sidebar">
+          <div className="logo">
+            <h2>Schedge&nbsp;<i className="far fa-calendar-alt"></i></h2>
           </div>
-          <div class="classroom">
+          <div className="classroom">
             <h3>Classroom</h3>
             <div>
               <input name="classroom" type="radio" value="406"/>
-              <label for="406">&nbsp;406</label>
+              <label htmlFor="406">&nbsp;406</label>
             </div>
             <div>
               <input name="classroom" type="radio" value="512"/>
-              <label for="512">&nbsp;512</label>
+              <label htmlFor="512">&nbsp;512</label>
             </div>
             <div>
               <input name="classroom" type="radio" value="626"/>
-              <label for="626">&nbsp;626</label>
+              <label htmlFor="626">&nbsp;626</label>
             </div>
           </div>
-          <div class="teacher">
+          <div className="teacher">
             <h3>Teacher</h3>
             <div>
               <input name="teacher" type="radio" value="Harper"/>
-              <label for="Harper">&nbsp;Harper</label>
+              <label htmlFor="Harper">&nbsp;Harper</label>
             </div>
             <div>
               <input name="teacher" type="radio" value="Hatch"/>
-              <label for="Hatch">&nbsp;Hatch</label>
+              <label htmlFor="Hatch">&nbsp;Hatch</label>
             </div>
             <div>
               <input name="teacher" type="radio" value="Christensen"/>
-              <label for="Christensen">&nbsp;Christensen</label>
+              <label htmlFor="Christensen">&nbsp;Christensen</label>
             </div>
           </div>
         </div>
         <DnDCalendar
+          selectable
           defaultDate={new Date()}
           defaultView="week"
           events={this.state.events}
-          onEventDrop={this.onEventDrop}
-          onEventResize={this.onEventResize}
+          onEventDrop={this.moveEvent}
+          onEventResize={this.resizeEvent}
           resizable
           style={{ height: "100vh", width: "100%" }}
           localizer={localizer}
-          min={new Date('2019, 1, 7, 06:00')}
-          max={new Date('2019, 1, 7, 23:00')}
+          min={new Date('2019, 3, 7, 06:00')}
+          max={new Date('2019, 3, 13, 23:00')}
+          onSelectEvent={event => alert(event.title)}
+          onSelectSlot={this.handleSelect}
+          step={15}
         />
       </div>
     );

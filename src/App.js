@@ -4,6 +4,7 @@ import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import allEvents from './events';
 import Select from 'react-select';
+import Modal from 'react-modal';
 
 import "./App.css";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
@@ -22,7 +23,8 @@ class App extends Component {
         roomOptions: [],
         teacherOptions: [],
         selectedRoom: '',
-        selectedTeacher: ''
+        selectedTeacher: '',
+        modalIsOpen: false
     }
     this.resizeEvent = this.resizeEvent.bind(this);
     this.moveEvent = this.moveEvent.bind(this);
@@ -52,6 +54,14 @@ class App extends Component {
       events: nextEvents,
     });
   };
+
+  openModal = () => {
+    this.setState({modalIsOpen: true});
+  }
+
+  closeModal = () => {
+    this.setState({modalIsOpen: false});
+  }
 
   handleSelect = ({ start, end }) => {
     const title = window.prompt('New Event name')
@@ -105,14 +115,22 @@ class App extends Component {
   }
 
   handleTeacherChange(selectedTeacher) {
-      this.setState({ selectedTeacher });
+    let everyEvent = this.state.events;
+    let newEvents = everyEvent.filter(event => event.teacher === selectedTeacher.value);
+    this.setState({
+      specificEvents: newEvents,
+      selectedTeacher
+    })
   }
-
-
 
   render() {
     console.log(this.state);
     const { roomOptions, teacherOptions, selectedRoom, selectedTeacher, events, specificEvents } = this.state;
+    let modalStyle = {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    };
     return (
       <div className="App">
         <div className="sidebar">
@@ -152,9 +170,31 @@ class App extends Component {
           min={new Date('2019, 3, 7, 06:00')}
           max={new Date('2019, 3, 13, 23:00')}
           onSelectEvent={event => alert(event.title)}
-          onSelectSlot={this.handleSelect}
+          onSelectSlot={this.openModal}
           step={15}
         />
+
+        <Modal
+          isOpen={this.state.modalIsOpen}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          style={modalStyle}
+          contentLabel="Example Modal"
+          ariaHideApp={false}
+          className="modal"
+        >
+          <div className="modal-body">
+            <div className="modal-header">
+              <h2 ref={subtitle => this.subtitle = subtitle}>Add Event</h2>
+              <button onClick={this.closeModal}>X</button>
+            </div>
+            <p>I am a modal</p>
+            <input placeholder="Title"/>
+            <input placeholder="Teacher"/>
+            <input placeholder="Room"/>
+            <button>Add</button>
+          </div>
+        </Modal>
       </div>
     );
   }

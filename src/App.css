@@ -90,3 +90,22 @@
 .clear-btn:active {
   border: solid 1px white;
 }
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+.modal-body {
+  background: #34608F;
+  width: 600px;
+  height: 400px;
+  border-radius: 8px;
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 20px;
+}

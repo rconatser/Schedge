@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import BigCalendar from "react-big-calendar";
 import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-import events from './events';
+import allEvents from './events';
+import Select from 'react-select';
 
 import "./App.css";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
@@ -16,22 +17,26 @@ class App extends Component {
     constructor(props){
       super(props);
       this.state = {
-        events: events
+        events: [],
+        specificEvents: '',
+        roomOptions: [],
+        teacherOptions: [],
+        selectedRoom: '',
+        selectedTeacher: ''
     }
     this.resizeEvent = this.resizeEvent.bind(this);
     this.moveEvent = this.moveEvent.bind(this);
+    this.loadEvents = this.loadEvents.bind(this);
+    this.handleRoomChange = this.handleRoomChange.bind(this);
+    this.handleTeacherChange = this.handleTeacherChange.bind(this);
   };
 
   moveEvent ({ event, start, end, allDay }){
     const { events } = this.state;
-
     const idx = events.indexOf(event);
-
     const updatedEvent = { ...event, start, end, allDay };
-
     const nextEvents = [ ...events ];
     nextEvents.splice(idx, 1, updatedEvent);
-
     this.setState({
       events: nextEvents,
     });
@@ -48,7 +53,6 @@ class App extends Component {
     });
   };
 
-
   handleSelect = ({ start, end }) => {
     const title = window.prompt('New Event name')
     if (title)
@@ -64,8 +68,51 @@ class App extends Component {
       })
   }
 
+  loadEvents() {
+    let roomsArray = [ ...new Set(allEvents.map(event => event.room)) ];
+    let teachersArray = [ ...new Set(allEvents.map(event => event.teacher)) ];
+    let rooms = [];
+    let teachers = [];
+    for(let i = 0; i < roomsArray.length; i++){
+      rooms.push({value: roomsArray[i], label: roomsArray[i]});
+    }
+    for(let i = 0; i < teachersArray.length; i++) {
+      teachers.push({value: teachersArray[i], label: teachersArray[i]});
+    }
+    this.setState({
+      events: allEvents,
+      specificEvents: '',
+      roomOptions: rooms,
+      teacherOptions: teachers,
+      selectedRoom: '',
+      selectedTeacher: ''
+    })
+  }
+
+  clearEvents = () => {
+    this.setState({
+      events: []
+    })
+  }
+
+  handleRoomChange(selectedRoom) {
+    let everyEvent = this.state.events;
+    let newEvents = everyEvent.filter(event => event.room === selectedRoom.value);
+    this.setState({
+      specificEvents: newEvents,
+      selectedRoom
+    })
+  }
+
+  handleTeacherChange(selectedTeacher) {
+      this.setState({ selectedTeacher });
+  }
+
+
+
   render() {
-    console.log(this.state.events);
+    console.log(this.state);
+    const { roomOptions, teacherOptions, selectedRoom, selectedTeacher, events, specificEvents } = this.state;
     return (
       <div className="App">
         <div className="sidebar">
@@ -73,41 +120,30 @@ class App extends Component {
             <h2>Schedge&nbsp;<i className="far fa-calendar-alt"></i></h2>
           </div>
           <div className="classroom">
-            <h3>Classroom</h3>
-            <div>
-              <input name="classroom" type="radio" value="406"/>
-              <label htmlFor="406">&nbsp;406</label>
-            </div>
-            <div>
-              <input name="classroom" type="radio" value="512"/>
-              <label htmlFor="512">&nbsp;512</label>
-            </div>
-            <div>
-              <input name="classroom" type="radio" value="626"/>
-              <label htmlFor="626">&nbsp;626</label>
-            </div>
+            <Select
+              placeholder="Select Room"
+              value={selectedRoom}
+              onChange={this.handleRoomChange}
+              options={roomOptions}
+            />
           </div>
           <div className="teacher">
-            <h3>Teacher</h3>
-            <div>
-              <input name="teacher" type="radio" value="Harper"/>
-              <label htmlFor="Harper">&nbsp;Harper</label>
-            </div>
-            <div>
-              <input name="teacher" type="radio" value="Hatch"/>
-              <label htmlFor="Hatch">&nbsp;Hatch</label>
-            </div>
-            <div>
-              <input name="teacher" type="radio" value="Christensen"/>
-              <label htmlFor="Christensen">&nbsp;Christensen</label>
-            </div>
+            <Select
+              placeholder="Select Teacher"
+              value={selectedTeacher}
+              onChange={this.handleTeacherChange}
+              options={teacherOptions}
+            />
           </div>
+          <button className="load-btn" onClick={this.loadEvents}>Load Events</button>
+          <button className="reset-btn" onClick={this.loadEvents}>Reset</button>
+          <button className="clear-btn" onClick={this.clearEvents}>Clear</button>
         </div>
         <DnDCalendar
           selectable
           defaultDate={new Date()}
           defaultView="week"
-          events={this.state.events}
+          events={specificEvents === '' ? events : specificEvents}
           onEventDrop={this.moveEvent}
           onEventResize={this.resizeEvent}
           resizable

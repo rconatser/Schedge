@@ -47,7 +47,8 @@ class App extends Component {
   resizeEvent ({ event, start, end }){
     const { events } = this.state;
     const nextEvents = events.map(existingEvent => {
-      return existingEvent.id === event.id ? { ...existingEvent, start, end } : existingEvent;
+      // return existingEvent.id === event.id ? { ...existingEvent, start, end } : existingEvent;
+      console.log(event.id);
     });
 
     this.setState({
@@ -101,7 +102,9 @@ class App extends Component {
 
   clearEvents = () => {
     this.setState({
-      events: []
+      events: [],
+      roomOptions: [],
+      teacherOptions: []
     })
   }
 
@@ -126,11 +129,6 @@ class App extends Component {
   render() {
     console.log(this.state);
     const { roomOptions, teacherOptions, selectedRoom, selectedTeacher, events, specificEvents } = this.state;
-    let modalStyle = {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center"
-    };
     return (
       <div className="App">
         <div className="sidebar">
@@ -153,9 +151,9 @@ class App extends Component {
               options={teacherOptions}
             />
           </div>
-          <button className="load-btn" onClick={this.loadEvents}>Load Events</button>
-          <button className="reset-btn" onClick={this.loadEvents}>Reset</button>
-          <button className="clear-btn" onClick={this.clearEvents}>Clear</button>
+          <button className="load-btn btn" onClick={this.loadEvents}>Load Events</button>
+          <button className="reset-btn btn" onClick={this.loadEvents}>Reset</button>
+          <button className="clear-btn btn" onClick={this.clearEvents}>Clear</button>
         </div>
         <DnDCalendar
           selectable
@@ -176,23 +174,20 @@ class App extends Component {
 
         <Modal
           isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
-          style={modalStyle}
-          contentLabel="Example Modal"
           ariaHideApp={false}
           className="modal"
+          overlayClassName="modal-overlay"
         >
           <div className="modal-body">
             <div className="modal-header">
               <h2 ref={subtitle => this.subtitle = subtitle}>Add Event</h2>
               <button onClick={this.closeModal}>X</button>
             </div>
-            <p>I am a modal</p>
-            <input placeholder="Title"/>
-            <input placeholder="Teacher"/>
-            <input placeholder="Room"/>
-            <button>Add</button>
+            <input className="input" placeholder="Title"/>
+            <input className="input" placeholder="Teacher"/>
+            <input className="input" placeholder="Room"/>
+            <button className="add-btn">Add</button>
           </div>
         </Modal>
       </div>

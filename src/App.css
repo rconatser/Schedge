@@ -95,7 +95,7 @@
   border: solid 1px white;
 }
 
-.modal-overlay {
+.add-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -107,7 +107,7 @@
   align-items: center;
   z-index: 99999;
 }
-.modal {
+.add-modal {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -117,7 +117,7 @@
   box-shadow: 0px 0px 20px;
   border-radius: 8px;
 }
-.modal-body {
+.add-modal-body {
   background: #34608F;
   width: 360px;
   height: 220px;
@@ -129,10 +129,10 @@
   padding: 20px;
   color: white;
 }
-.modal-body h2 {
+.add-modal-body h2 {
   margin: 0;
 }
-.modal-header {
+.add-modal-header {
   width: 100%;
   display: flex;
   justify-content: space-between;

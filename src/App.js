@@ -24,7 +24,12 @@ class App extends Component {
         teacherOptions: [],
         selectedRoom: '',
         selectedTeacher: '',
-        modalIsOpen: false
+        modalIsOpen: false,
+        newTitle: '',
+        newTeacher: '',
+        newRoom: '',
+        start: '',
+        end: ''
     }
     this.resizeEvent = this.resizeEvent.bind(this);
     this.moveEvent = this.moveEvent.bind(this);
@@ -47,10 +52,10 @@ class App extends Component {
   resizeEvent ({ event, start, end }){
     const { events } = this.state;
     const nextEvents = events.map(existingEvent => {
-      // return existingEvent.id === event.id ? { ...existingEvent, start, end } : existingEvent;
-      console.log(event.id);
+      return events.indexOf(existingEvent) === events.indexOf(event)
+        ? { ...existingEvent, start, end }
+        : existingEvent;
     });
-
     this.setState({
       events: nextEvents,
     });
@@ -64,19 +69,31 @@ class App extends Component {
     this.setState({modalIsOpen: false});
   }
 
-  handleSelect = ({ start, end }) => {
-    const title = window.prompt('New Event name')
-    if (title)
-      this.setState({
-        events: [
-          ...this.state.events,
-          {
-            start,
-            end,
-            title,
-          },
-        ],
-      })
+  newEvent = ({start, end}) => {
+    this.setState({
+      modalIsOpen: true,
+      start: start,
+      end: end
+    })
+  }
+
+  addEvent = () => {
+    const { title, start, end, newRoom, newTeacher} = this.state;
+    this.setState({
+      events: [
+        ...this.state.events,
+        {
+          title,
+          start,
+          end,
+          room: newRoom,
+          teacher: newTeacher,
+        },
+      ],
+      newTeacher: '',
+      newTitle: '',
+      newRoom: ''
+    })
   }
 
   loadEvents() {
@@ -126,6 +143,13 @@ class App extends Component {
     })
   }
 
+  handleInputChange = (e) =>{
+    const key = e.target.name;
+    let newState = this.state[key];
+    newState = e.target.value;
+    this.setState({ [key]: newState });
+  }
+
   render() {
     console.log(this.state);
     const { roomOptions, teacherOptions, selectedRoom, selectedTeacher, events, specificEvents } = this.state;
@@ -141,6 +165,7 @@ class App extends Component {
               value={selectedRoom}
               onChange={this.handleRoomChange}
               options={roomOptions}
+              isMulti
             />
           </div>
           <div className="teacher">
@@ -149,6 +174,7 @@ class App extends Component {
               value={selectedTeacher}
               onChange={this.handleTeacherChange}
               options={teacherOptions}
+              isMulti
             />
           </div>
           <button className="load-btn btn" onClick={this.loadEvents}>Load Events</button>
@@ -157,7 +183,7 @@ class App extends Component {
         </div>
         <DnDCalendar
           selectable
-          defaultDate={new Date()}
+          defaultDate={new Date('2019, 4, 10, 06:00')}
           defaultView="week"
           events={specificEvents === '' ? events : specificEvents}
           onEventDrop={this.moveEvent}
@@ -167,8 +193,8 @@ class App extends Component {
           localizer={localizer}
           min={new Date('2019, 3, 7, 06:00')}
           max={new Date('2019, 3, 13, 23:00')}
-          onSelectEvent={event => alert(event.title)}
-          onSelectSlot={this.openModal}
+          onSelectEvent={event => console.log(events.indexOf(event))}
+          onSelectSlot={this.newEvent}
           step={15}
         />
 
@@ -176,18 +202,18 @@ class App extends Component {
           isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}
           ariaHideApp={false}
-          className="modal"
-          overlayClassName="modal-overlay"
+          className="add-modal"
+          overlayClassName="add-modal-overlay"
         >
-          <div className="modal-body">
-            <div className="modal-header">
+          <div className="add-modal-body">
+            <div className="add-modal-header">
               <h2 ref={subtitle => this.subtitle = subtitle}>Add Event</h2>
               <button onClick={this.closeModal}>X</button>
             </div>
-            <input className="input" placeholder="Title"/>
-            <input className="input" placeholder="Teacher"/>
-            <input className="input" placeholder="Room"/>
-            <button className="add-btn">Add</button>
+            <input className="input" placeholder="Title"  name="newTitle" value={this.state.newTitle} onChange={ e => {this.handleInputChange(e) }}/>
+            <input className="input" placeholder="Teacher" name="newTeacher" value={this.state.newTeacher} onChange={ e => {this.handleInputChange(e) }}/>
+            <input className="input" placeholder="Room" name="newRoom" value={this.state.newRoom} onChange={ e => {this.handleInputChange(e) }}/>
+            <button className="add-btn" onClick={this.addEvent}>Add</button>
           </div>
         </Modal>
       </div>

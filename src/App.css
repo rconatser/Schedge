@@ -114,23 +114,68 @@
   border: solid 1px white;
 }
 
-.modal {
+.add-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #00000030;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
+  z-index: 99999;
 }
-.modal-body {
+.add-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 360px;
+  height: 260px;
+  outline: none;
+  box-shadow: 0px 0px 20px;
+  border-radius: 8px;
+}
+.add-modal-body {
   background: #34608F;
-  width: 600px;
-  height: 400px;
+  width: 360px;
+  height: 220px;
   border-radius: 8px;
   display:flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   padding: 20px;
+  color: white;
+}
+.add-modal-body h2 {
+  margin: 0;
+}
+.add-modal-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.input {
+  width: 97%;
+  height: 25px;
+  padding: 5px;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: 10pt;
+}
+.add-btn {
+  width: 100%;
+  height: 40px;
+  border: none;
+  background: #0597F2;
+  color: white;
+  font-size: 10pt;
+  border-radius: 4px;
+
 }
 
 .sidebar-buttons {

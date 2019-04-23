@@ -1,0 +1,50 @@
+.rbc-toolbar {
+    display: none;
+  }
+
+.rbc-addons-dnd-row-body {
+    display: none;
+}
+
+.rbc-header {
+    border-bottom: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 13px;
+    text-align: center;
+    font-weight: 500;
+    color: #919191;
+}
+
+.rbc-header{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.rbc-allday-cell {
+    display: none;
+}
+
+.rbc-label {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.rbc-timeslot-group {
+    display: flex;
+    align-content: center;
+}
+
+.rbc-timeslot {
+    width: 100%;
+}
+
+.rbc-time-content {
+    border-top: 1px solid #DDD;
+}
+
+.rbc-current-time-indicator {
+    background-color: #ff5c5c;
+}

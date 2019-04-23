@@ -9,6 +9,7 @@ import Modal from 'react-modal';
 import "./App.css";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "./calendar-styles.css";
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
@@ -156,8 +157,9 @@ class App extends Component {
     return (
       <div className="App">
         <div className="sidebar">
+        <div className="top">
           <div className="logo">
-            <h2>Schedge&nbsp;<i className="far fa-calendar-alt"></i></h2>
+          <img class= "logo-image" src="https://www.uvu.edu/marketing/images/logos/full__0006_branding_horizontal.png"></img>
           </div>
           <div className="classroom">
             <Select
@@ -177,9 +179,12 @@ class App extends Component {
               isMulti
             />
           </div>
+          </div>
+          <div className="sidebar-buttons">
           <button className="load-btn btn" onClick={this.loadEvents}>Load Events</button>
           <button className="reset-btn btn" onClick={this.loadEvents}>Reset</button>
           <button className="clear-btn btn" onClick={this.clearEvents}>Clear</button>
+        </div>
         </div>
         <DnDCalendar
           selectable

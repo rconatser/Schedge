@@ -159,7 +159,7 @@ class App extends Component {
         <div className="sidebar">
         <div className="top">
           <div className="logo">
-          <img class= "logo-image" src="https://www.uvu.edu/marketing/images/logos/full__0006_branding_horizontal.png"></img>
+          <img class= "logo-image" src="./Schedge-Logo.svg"></img>
           </div>
           <div className="classroom">
             <Select

@@ -10,6 +10,7 @@ import "./App.css";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./calendar-styles.css";
+import SchedgeLogo from './Schedge-Logo.svg';
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
@@ -159,7 +160,7 @@ class App extends Component {
         <div className="sidebar">
         <div className="top">
           <div className="logo">
-          <img class= "logo-image" src="./Schedge-Logo.svg"></img>
+          <img class="logo-image" src={SchedgeLogo} alt="schedge logo"></img>
           </div>
           <div className="classroom">
             <Select

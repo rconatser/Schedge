@@ -160,7 +160,7 @@ class App extends Component {
         <div className="sidebar">
         <div className="top">
           <div className="logo">
-          <img class="logo-image" src={SchedgeLogo} alt="schedge logo"></img>
+            <img className="logo-image" src={SchedgeLogo} alt="schedge logo"></img>
           </div>
           <div className="classroom">
             <Select

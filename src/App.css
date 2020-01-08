@@ -18,25 +18,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 90%;
 }
 
 .logo {
-  margin-bottom: 0px;
+  width: 100%;
+  margin: 20px 0px 20px 0px;
 }
 
 .logo-image {
   max-width: 100%;
+  height: auto;
 }
 
 .classroom {
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
   color: #34608F;
 }
 .teacher {
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin-bottom: 50px;
